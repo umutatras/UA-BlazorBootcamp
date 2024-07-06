@@ -1,0 +1,10 @@
+﻿@page "/"
+
+<PageTitle>Home</PageTitle>
+
+<p class="mb-1">@password</p>
+<input  type="text" class="form-control" @bind="password"/>
+
+@code{
+    private string password = "Umut Atraş";
+}

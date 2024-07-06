@@ -1,0 +1,35 @@
+﻿@page "/isloading-iscompany"
+<h3>IsLoadingAndCompanyExamples</h3>
+
+
+<button class="btn btn-primary" @onclick="HandleChangeLoadingButtonClick">Change Loading</button>
+
+<button @onmouseenter="HandleChangeLoadingButtonClick" class="@(isCompany? "text-info":"text-danger")"></button>
+@if (isCompany)
+{
+    <h2>Vergi kimlik No:</h2>
+}
+else
+{
+    <h1>Tc Kimli No:</h1>
+}
+@if (loading)
+{
+    <h2>Loading...</h2>
+}
+else
+{
+    <h1>@userName.ToLowerInvariant()</h1>
+}
+
+@code{
+    private bool loading = false;
+    private string userName = "Umut ATRAŞ";
+    private bool isCompany = false;
+
+    private void HandleChangeLoadingButtonClick()
+    {
+        loading = !loading;
+        isCompany = !isCompany;
+    }
+}
