@@ -2,10 +2,17 @@
 
 <PageTitle>Home</PageTitle>
 
-<p class="mb-1">@password</p><input type="text" class="form-control" @bind="password" @bind:evet="oninput" />
+<div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2">
+    <span class="input-group-text" id="basic-addon2">📄</span>
+    <span class="input-group-text" id="basic-addon2">🔄</span>
+    <span class="input-group-text" id="basic-addon2">💾</span>
+</div>
+
+@*<p class="mb-1">@password</p><input type="text" class="form-control" @bind="password" @bind:evet="oninput" />
 <input  type="range" min="6" max="30" step="1" class="form-control" @bind="password" @bind:evet="oninput"/>
 
 @code{
     private string password = "Umut Atraş";
     private int passwordLength = 6;
-}
+}*@
