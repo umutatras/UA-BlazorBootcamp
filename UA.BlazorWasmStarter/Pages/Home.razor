@@ -3,16 +3,84 @@
 <PageTitle>Home</PageTitle>
 
 <div class="input-group mb-3">
-    <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2">
-    <span class="input-group-text my-clickable-button" id="basic-addon2">📄</span>
-    <span class="input-group-text my-clickable-button" id="basic-addon2">🔄</span>
-    <span class="input-group-text my-clickable-button" id="basic-addon2">💾</span>
+    <input @bind="password" readonly type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2">
+    <span 
+          class="input-group-text my-clickable-button @onHoverCopyCss"
+          id="basic-addon2"
+          @onmouseenter="@(()=>OnEmojiHover(iconType:"copy"))"
+          @onmouseleave="OnEmojiMouseLeft">📄</span>
+
+    <span @onclick="HandleGeneratePasswordClick"
+          class="input-group-text my-clickable-button @onHoverGenerateCss"
+          id="basic-addon2" @onmouseenter="@(()=>OnEmojiHover(iconType:"generate"))"
+          @onmouseleave="OnEmojiMouseLeft">🔄</span>
+
+    <span class="input-group-text my-clickable-button @onHoverSaveCss"
+          id="basic-addon2"
+          @onmouseenter="@(()=>OnEmojiHover(iconType:"save"))"
+          @onmouseleave="OnEmojiMouseLeft">💾</span>
 </div>
-
-@*<p class="mb-1">@password</p><input type="text" class="form-control" @bind="password" @bind:evet="oninput" />
-<input  type="range" min="6" max="30" step="1" class="form-control" @bind="password" @bind:evet="oninput"/>
-
+<div class="card mt-3">
+    <div class="card-header">
+        💾 Saved Passwords
+    </div>
+    <div class="card-body">
+        <ul class="list-group">
+            <li class="list-group-item">An item</li>
+            <li class="list-group-item">A second item</li>
+            <li class="list-group-item">A third item</li>
+            <li class="list-group-item">A fourth item</li>
+            <li class="list-group-item">And a fifth one</li>
+        </ul>
+    </div>
+</div>
 @code{
-    private string password = "Umut Atraş";
-    private int passwordLength = 6;
-}*@
+    private string onHoverCopyCss = string.Empty;
+    private string onHoverGenerateCss = string.Empty;
+    private string onHoverSaveCss = string.Empty;
+    private string password = string.Empty;
+    private int passwordLenght = 10;
+
+    private static Random random = new Random();
+    private static System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+
+    private void HandleGeneratePasswordClick()
+    {
+        stringBuilder.Clear();
+        for (int i = 0; i < passwordLenght; i++)
+        {
+            stringBuilder.Append(random.Next(0, 10));
+        }
+        password = stringBuilder.ToString();
+    }
+    private void OnEmojiHover(string iconType)
+    {
+        switch (iconType)
+        {
+            case "copy":
+                onHoverCopyCss = "bg-secondary";
+                break;
+            case "save":
+                onHoverGenerateCss = "bg-secondary";
+                break;
+            case "generate":
+                onHoverSaveCss = "bg-secondary";
+                break;
+            default:
+                break;
+        }
+    }
+    private void OnEmojiMouseLeft()
+    {
+        onHoverCopyCss = string.Empty;
+        onHoverGenerateCss = string.Empty;
+        onHoverSaveCss = string.Empty;
+    }
+}
+@*<p class="mb-1">@password</p><input type="text" class="form-control" @bind="password" @bind:evet="oninput" />
+    <input  type="range" min="6" max="30" step="1" class="form-control" @bind="password" @bind:evet="oninput"/>
+
+    @code{
+        private string password = "Umut Atraş";
+        private int passwordLength = 6;
+    }*@
