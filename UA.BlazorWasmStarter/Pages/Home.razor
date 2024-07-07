@@ -3,20 +3,23 @@
 <PageTitle>Home</PageTitle>
 
 <div class="input-group mb-3">
-    <input @bind="password" readonly type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2">
-    <span 
-          class="input-group-text my-clickable-button @onHoverCopyCss"
-          id="basic-addon2"
+    <input @bind="password"
+           readonly
+           type="text"
+           class="form-control">
+    <span class="input-group-text my-clickable-button @onHoverCopyCss"
+          id="basic-addon1"
           @onmouseenter="@(()=>OnEmojiHover(iconType:"copy"))"
           @onmouseleave="OnEmojiMouseLeft">📄</span>
 
     <span @onclick="HandleGeneratePasswordClick"
           class="input-group-text my-clickable-button @onHoverGenerateCss"
-          id="basic-addon2" @onmouseenter="@(()=>OnEmojiHover(iconType:"generate"))"
+          id="basic-addon2"
+          @onmouseenter="@(()=>OnEmojiHover(iconType:"generate"))"
           @onmouseleave="OnEmojiMouseLeft">🔄</span>
 
     <span class="input-group-text my-clickable-button @onHoverSaveCss"
-          id="basic-addon2"
+          id="basic-addon3"
           @onmouseenter="@(()=>OnEmojiHover(iconType:"save"))"
           @onmouseleave="OnEmojiMouseLeft">💾</span>
 </div>
@@ -26,11 +29,12 @@
     </div>
     <div class="card-body">
         <ul class="list-group">
-            <li class="list-group-item">An item</li>
-            <li class="list-group-item">A second item</li>
-            <li class="list-group-item">A third item</li>
-            <li class="list-group-item">A fourth item</li>
-            <li class="list-group-item">And a fifth one</li>
+            @foreach (var item in savePasswords)
+            {
+                <li class="list-group-item">@item</li>
+
+            }
+
         </ul>
     </div>
 </div>
@@ -43,6 +47,7 @@
 
     private static Random random = new Random();
     private static System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+    private List<string> savePasswords = [];
 
     private void HandleGeneratePasswordClick()
     {
@@ -52,6 +57,7 @@
             stringBuilder.Append(random.Next(0, 10));
         }
         password = stringBuilder.ToString();
+        savePasswords.Add(password);
     }
     private void OnEmojiHover(string iconType)
     {
@@ -61,10 +67,10 @@
                 onHoverCopyCss = "bg-secondary";
                 break;
             case "save":
-                onHoverGenerateCss = "bg-secondary";
+                onHoverSaveCss = "bg-secondary";
                 break;
             case "generate":
-                onHoverSaveCss = "bg-secondary";
+                onHoverGenerateCss = "bg-secondary";
                 break;
             default:
                 break;
