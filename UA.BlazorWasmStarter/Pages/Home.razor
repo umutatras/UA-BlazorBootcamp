@@ -18,7 +18,8 @@
           @onmouseenter="@(()=>OnEmojiHover(iconType:"generate"))"
           @onmouseleave="OnEmojiMouseLeft">🔄</span>
 
-    <span class="input-group-text my-clickable-button @onHoverSaveCss"
+    <span @onclick="SaveHandlePasswordClick"
+          class="input-group-text my-clickable-button @onHoverSaveCss"
           id="basic-addon3"
           @onmouseenter="@(()=>OnEmojiHover(iconType:"save"))"
           @onmouseleave="OnEmojiMouseLeft">💾</span>
@@ -39,6 +40,16 @@
     </div>
 </div>
 @code{
+    private bool includeLowerCase = true;
+    private bool includeUpperCase = true;
+    private bool includeNumbers = true;
+    private bool includeSpecialChars = true;
+
+    private const string lowerCaseLetters = "abcdefghijklmnopqrstuvwxyz";
+    private const string upperCaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private const string numbers = "0123456789";
+    private const string specialCharacters = "!@#$%^&*()_+-=[]{}|;:,.<>?";
+
     private string onHoverCopyCss = string.Empty;
     private string onHoverGenerateCss = string.Empty;
     private string onHoverSaveCss = string.Empty;
@@ -49,15 +60,37 @@
     private static System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
     private List<string> savePasswords = [];
 
+    private void SaveHandlePasswordClick()
+    {
+        if (string.IsNullOrEmpty(password) || savePasswords.Any(x => x == password)) return;
+        savePasswords.Insert(0, password);
+    }
     private void HandleGeneratePasswordClick()
     {
         stringBuilder.Clear();
+        var validChars = new System.Text.StringBuilder();
+
+        // allLowercaseLetters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+        if (includeLowerCase)
+            validChars.Append(lowerCaseLetters);
+
+        if (includeUpperCase)
+            validChars.Append(upperCaseLetters);
+
+        if (includeNumbers)
+            validChars.Append(numbers);
+
+        if (includeSpecialChars)
+            validChars.Append(specialCharacters);
+
+
         for (int i = 0; i < passwordLenght; i++)
         {
-            stringBuilder.Append(random.Next(0, 10));
+            var randomIndex = random.Next(0, validChars.Length);
+        stringBuilder.Append(validChars[randomIndex]);
         }
         password = stringBuilder.ToString();
-        savePasswords.Add(password);
     }
     private void OnEmojiHover(string iconType)
     {
