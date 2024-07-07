@@ -2,9 +2,10 @@
 
 <PageTitle>Home</PageTitle>
 
-<p class="mb-1">@password</p>
-<input  type="text" class="form-control" @bind="password"/>
+<p class="mb-1">@password</p><input type="text" class="form-control" @bind="password" @bind:evet="oninput" />
+<input  type="range" min="6" max="30" step="1" class="form-control" @bind="password" @bind:evet="oninput"/>
 
 @code{
     private string password = "Umut Atraş";
+    private int passwordLength = 6;
 }
