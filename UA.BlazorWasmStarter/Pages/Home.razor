@@ -14,22 +14,27 @@
 
         <div class="mb-3">
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
+                <input class="form-check-input" type="checkbox" @bind="@includeNumbers" id="inlineCheckbox1" @oninput="((args)=>HandleCheckBoxOnChange(args,Enums.CheckBoxActionType.Numbers))">
                 <label class="form-check-label" for="inlineCheckbox1">Numbers</label>
             </div>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+                <input class="form-check-input" type="checkbox" @bind="@includeLowerCase" id="inlineCheckbox2" @oninput="((args)=>HandleCheckBoxOnChange(args,Enums.CheckBoxActionType.Lowercase))">
                 <label class="form-check-label" for="inlineCheckbox2">Lowercase</label>
             </div>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option2">
+                <input class="form-check-input" type="checkbox" @bind="@includeUpperCase" id="inlineCheckbox3" @oninput="((args)=>HandleCheckBoxOnChange(args,Enums.CheckBoxActionType.Uppercase))">
                 <label class="form-check-label" for="inlineCheckbox3">Uppercase</label>
             </div>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="inlineCheckbox4" value="option2">
+                <input class="form-check-input" type="checkbox" @bind="@includeSpecialChars" id="inlineCheckbox4" @oninput="((args)=>HandleCheckBoxOnChange(args,Enums.CheckBoxActionType.SpecialChars))">
                 <label class="form-check-label" for="inlineCheckbox4">Special Chars</label>
             </div>
         </div>
+    </div>
+    <div>
+        <p class="mb-1 mt-3">Password Length: <b>@passwordLenght</b></p>
+
+        <input type="range" class="form-range" step="1" min="8" max="50" @bind="passwordLenght" @bind:event="oninput" />
     </div>
 </div>
 <div class="card mt-3">
@@ -47,6 +52,7 @@
         </ul>
     </div>
 </div>
+
 @code{
     private bool includeLowerCase = true;
     private bool includeUpperCase = true;
@@ -106,6 +112,33 @@
     {
         GeneratePassword();
         base.OnInitialized();
+    }
+
+    private void HandleCheckBoxOnChange(ChangeEventArgs args, UA.BlazorWasmStarter.Enums.CheckBoxActionType actionType)
+    {
+        if (args.Value is null)
+        {
+            return;
+        }
+        switch (actionType)
+        {
+            case Enums.CheckBoxActionType.Numbers:
+                includeNumbers = (bool)args.Value;
+                break;
+            case Enums.CheckBoxActionType.Lowercase:
+                includeLowerCase = (bool)args.Value;
+                break;
+            case Enums.CheckBoxActionType.Uppercase:
+                includeUpperCase = (bool)args.Value;
+                break;
+            case Enums.CheckBoxActionType.SpecialChars:
+                includeSpecialChars = (bool)args.Value;
+                break;
+            default:
+                throw new ArgumentException("Geçersiz Değer", nameof(actionType));
+                
+        }
+        GeneratePassword();
     }
 
     private void HandleGeneratePasswordClick()
