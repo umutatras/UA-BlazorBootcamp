@@ -1,4 +1,5 @@
 ﻿@inject NavigationManager Navigation
+@inject IToastService toastService
 @page "/"
 
 <PageTitle>Home</PageTitle>
@@ -81,7 +82,7 @@
     private List<string> savePasswords = [];
     private void HandleSaveIconClick()
     {
-        Navigation.NavigateTo("/counter");
+        //Navigation.NavigateTo("/counter");
     }
     private void HandlePasswordLengthInputOnChange(ChangeEventArgs args)
     {
@@ -101,6 +102,7 @@
     {
         if (string.IsNullOrEmpty(password) || savePasswords.Any(x => x == password)) return;
         savePasswords.Insert(0, password);
+        toastService.ShowSuccess("Parola başarılı bir şekilde eklendi.");
     }
 
     private void GeneratePassword()
