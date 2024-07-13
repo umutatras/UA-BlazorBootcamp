@@ -34,7 +34,7 @@
     <div>
         <p class="mb-1 mt-3">Password Length: <b>@passwordLenght</b></p>
 
-        <input type="range" class="form-range" step="1" min="8" max="50" @bind="passwordLenght" @bind:event="oninput" />
+        <input type="range" class="form-range" step="1" min="8" max="50" @bind="passwordLenght" @oninput="HandleRangeOnChange" />
     </div>
 </div>
 <div class="card mt-3">
@@ -74,6 +74,13 @@
     private static System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
     private List<string> savePasswords = [];
 
+    private void HandleRangeOnChange(ChangeEventArgs args)
+    {
+        if (args.Value is null) return;
+
+        passwordLenght = Convert.ToInt32(args.Value);
+        GeneratePassword();
+    }
     private void SaveHandlePasswordClick()
     {
         if (string.IsNullOrEmpty(password) || savePasswords.Any(x => x == password)) return;
@@ -136,7 +143,7 @@
                 break;
             default:
                 throw new ArgumentException("Geçersiz Değer", nameof(actionType));
-                
+
         }
         GeneratePassword();
     }
