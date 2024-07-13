@@ -1,4 +1,4 @@
-﻿
+﻿@inject NavigationManager Navigation
 @page "/"
 
 <PageTitle>Home</PageTitle>
@@ -40,7 +40,11 @@
 </div>
 <div class="card mt-3">
     <div class="card-header">
-        <MaterialSaveIcon Width="2" Height="2" ColorCode="#FFDE4D"/> Saved Passwords
+        <MaterialSaveIcon AdditionalCss="cursor:pointer;"
+                          Width="2"
+                          Height="2"
+                          ColorCode="#FFDE4D"
+                          OnClick="@HandleSaveIconClick" /> Saved Passwords
     </div>
     <div class="card-body">
         <ul class="list-group">
@@ -74,7 +78,10 @@
     private static Random random = new Random();
     private static System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
     private List<string> savePasswords = [];
-
+    private void HandleSaveIconClick()
+    {
+        Navigation.NavigateTo("/counter");
+    }
     private void HandleRangeOnChange(ChangeEventArgs args)
     {
         if (args.Value is null) return;
