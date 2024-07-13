@@ -31,12 +31,13 @@
                 <label class="form-check-label" for="inlineCheckbox4">Special Chars</label>
             </div>
         </div>
-    </div>
-    <div>
-        <p class="mb-1 mt-3">Password Length: <b>@passwordLenght</b></p>
+        <div>
+            <p class="mb-1 mt-3">Password Length: <b>@passwordLenght</b></p>
 
-        <input type="range" class="form-range" step="1" min="8" max="50" @bind="passwordLenght" @oninput="HandleRangeOnChange" />
+            <input type="range" class="form-range" step="1" min="8" max="50" @bind="passwordLenght" @oninput="HandleRangeOnChange" />
+        </div>
     </div>
+
 </div>
 <div class="card mt-3">
     <div class="card-header">
@@ -81,6 +82,13 @@
     private void HandleSaveIconClick()
     {
         Navigation.NavigateTo("/counter");
+    }
+    private void HandlePasswordLengthInputOnChange(ChangeEventArgs args)
+    {
+        if (args.Value is null) return;
+
+        passwordLenght = Convert.ToInt32(args.Value);
+        GeneratePassword();
     }
     private void HandleRangeOnChange(ChangeEventArgs args)
     {
