@@ -1,30 +1,55 @@
 ﻿@page "/dall-e"
-
+@using OpenAI.Interfaces
+@using OpenAI.ObjectModels
+@using OpenAI.ObjectModels.RequestModels
+@inject IOpenAIService OpenAiService
 
 
 <div class="container mx-auto p-4">
     <div class="card bg-base-300 shadow-xl mb-8">
-        <div class="card-body">
-            <h2 class="card-title mb-4">Enter Your Prompt</h2>
-            <textarea class="textarea textarea-bordered w-full mb-4 transition-transform transform hover:scale-105" placeholder="Type your prompt here..."></textarea>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div>
-                    <h2 class="card-title mb-2">Number of Images</h2>
-                    <input type="number" class="input input-bordered w-full transition-transform transform hover:scale-105" placeholder="Enter number of images" min="1" max="10" />
+        <EditForm Model="formModel" OnInvalidSubmit="HandleGenerateClick">
+            <DataAnnotationsValidator></DataAnnotationsValidator>
+            <ValidationSummary></ValidationSummary>
+            <div class="card-body">
+                <h2 class="card-title mb-4">Enter Your Prompt</h2>
+                <InputTextArea @bind-Value="formModel.Prompt" class="textarea textarea-bordered w-full mb-4 transition-transform transform hover:scale-105" placeholder="Type your prompt here..."></InputTextArea>
+                <ValidationMessage class="text-red-500" For="@(()=>formModel.Prompt)">
+
+                </ValidationMessage>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <h2 class="card-title mb-2">Number of Images</h2>
+                        <InputNumber @bind-Value="formModel.NumberOfImages" type="number" class="input input-bordered w-full transition-transform transform hover:scale-105" placeholder="Enter number of images" min="1" max="10" />
+                        <ValidationMessage class="text-red-500" For="@(()=>formModel.NumberOfImages)">
+
+                        </ValidationMessage>
+                    </div>
+                    <div>
+                        <h2 class="card-title mb-2">Select Image Size</h2>
+                        <InputSelect @bind-Value="formModel.ImageSize" class="select select-bordered w-full transition-transform transform hover:scale-105">
+                            <ValidationMessage class="text-red-500" For="@(()=>formModel.ImageSize)">
+
+                            </ValidationMessage>
+                            @foreach (var size in sizes)
+                            {
+                                <option value="@size">@size</option>
+                            }
+
+                        </InputSelect>
+                    </div>
                 </div>
-                <div>
-                    <h2 class="card-title mb-2">Select Image Size</h2>
-                    <select class="select select-bordered w-full transition-transform transform hover:scale-105">
-                        <option value="256x256">256x256</option>
-                        <option value="512x512">512x512</option>
-                        <option value="1024x1024">1024x1024</option>
-                    </select>
+                <div class="card-actions justify-end">
+                    @if (isLoading)
+                    {
+                        <button class="m-1 animate-buttonheartbeat rounded-md bg-gray-500 px-4 py-1 text-lg font-semibold text-white transition-transform transform hover:scale-110 shadow-lg" disabled="disabled">Generate</button>
+                    }
+                    else
+                    {
+                        <button class="m-1 animate-buttonheartbeat rounded-md bg-yellow-500 px-4 py-1 text-lg font-semibold text-white transition-transform transform hover:scale-110 shadow-lg" @onclick="HandleGenerateClick">Generate</button>
+                    }
                 </div>
             </div>
-            <div class="card-actions justify-end">
-                <button class="m-1 animate-buttonheartbeat rounded-md bg-yellow-500 px-4 py-1 text-lg font-semibold text-white transition-transform transform hover:scale-110 shadow-lg" @onclick="GenerateAsync">Generate</button>
-            </div>
-        </div>
+        </EditForm>
     </div>
 
     @if (isLoading)
@@ -42,7 +67,7 @@
                     @foreach (var imageUrl in imageUrls)
                     {
                         <div class="bg-base-200 p-4 rounded-lg shadow-md transition-transform transform hover:scale-105">
-                            <img alt="Generated Image" class="w-full rounded-lg" />
+                            <img src="@imageUrl" alt="Generated Image" class="w-full rounded-lg" />
                         </div>
                     }
                 </div>
@@ -51,14 +76,56 @@
     }
 </div>
 @code {
-    private bool isLoading=false;
-    private string prompt = string.Empty;
-    private int numberOfImages = 2;
-    private string imageSize = string.Empty;
+    FormModel formModel = new();
+    private bool isLoading = false;
 
+    private IReadOnlyList<string> sizes = ["256x256", "512x512", "1024x1024"];
     private List<string> imageUrls = new();
-    private void GenerateAsync()
+    private async Task HandleGenerateClick()
     {
+        try
+        {
+            isLoading = true;
+            var imageResult = await OpenAiService.Image.CreateImage(new ImageCreateRequest
+            {
+                Prompt = formModel.Prompt,
+                N = formModel.NumberOfImages,
+                Size = formModel.ImageSize,
+                ResponseFormat = StaticValues.ImageStatics.ResponseFormat.Url,
+                User = "TestUser",
+            });
+            if (imageResult.Successful)
+            {
+                imageUrls = imageResult.Results.Select(r => r.Url).ToList();
+            }
+            else //handle errors
+            {
+                if (imageResult.Error == null)
+                {
+                    throw new Exception("Unknown Error");
+                }
+                Console.WriteLine($"{imageResult.Error.Code}: {imageResult.Error.Message}");
+            }
 
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    protected class FormModel
+    {
+        [System.ComponentModel.DataAnnotations.Required,System.ComponentModel.DataAnnotations.MinLength(5),System.ComponentModel.DataAnnotations.MaxLength(250)]
+        public string Prompt { get; set; }
+        [System.ComponentModel.DataAnnotations.Required, System.ComponentModel.DataAnnotations.MinLength(1), System.ComponentModel.DataAnnotations.MaxLength(6)]
+        public int NumberOfImages { get; set; }
+        [System.ComponentModel.DataAnnotations.AllowedValues("256x256", "512x512", "1024x1024")]
+        public string ImageSize { get; set; }
     }
 }
