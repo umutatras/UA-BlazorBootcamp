@@ -1,16 +1,21 @@
 ﻿@page "/models/{ModelName}"
-<h3>Models</h3>
-<p>Model Name: @ModelName</p>
+@inject NavigationManager Navigation
 
-@if(ModelName=="chatgpt")
-            {
-                <ChatGpt></ChatGpt>
-            }
+
+
+@if (ModelName == "chatgpt")
+{
+    <button class="btn btn-danger mb-3" @onclick="@(()=>Navigation.NavigateTo("/models/dall-e"))">Dall-e</button>
+    <ChatGpt></ChatGpt>
+}
 else
-            {
-                <Dalle></Dalle>
-            }
+{
+    <button class="btn btn-danger mb-3" @onclick="@(()=>Navigation.NavigateTo("/models/chatgpt"))">ChatGpt</button>
+    <Dalle></Dalle>
+}
+
+
 @code {
-[Parameter]
+    [Parameter]
     public string ModelName { get; set; }
 }
