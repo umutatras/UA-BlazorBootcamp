@@ -1,0 +1,16 @@
+﻿@page "/models/{ModelName}"
+<h3>Models</h3>
+<p>Model Name: @ModelName</p>
+
+@if(ModelName=="chatgpt")
+            {
+                <ChatGpt></ChatGpt>
+            }
+else
+            {
+                <Dalle></Dalle>
+            }
+@code {
+[Parameter]
+    public string ModelName { get; set; }
+}
