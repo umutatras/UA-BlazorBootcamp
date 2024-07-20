@@ -1,4 +1,5 @@
 ﻿@page "/models/{ModelName}"
+@*@page "/models"*@
 @inject NavigationManager Navigation
 
 
@@ -18,4 +19,7 @@ else
 @code {
     [Parameter]
     public string ModelName { get; set; }
+    //    [SupplyParameterFromQuery(Name ="modelName")] queryString olarak alabilmemizi sağlıyor
+    //[Parameter]
+    //    public string ModelName { get; set; } 
 }
