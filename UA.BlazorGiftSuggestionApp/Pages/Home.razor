@@ -1,7 +1,32 @@
 ﻿@page "/"
-
+@using System.ComponentModel.DataAnnotations
 <PageTitle>Home</PageTitle>
 
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
+
+
+@code
+{
+    protected class FormModel
+    {
+
+        [Required]
+        [AllowedValues(RelationshipType.Friend, RelationshipType.Relative,
+            RelationshipType.Parent, RelationshipType.Brother, RelationshipType.Sister,
+            RelationshipType.Child, RelationshipType.Spouse, RelationshipType.Colleague, RelationshipType.Other)]
+        public RelationshipType Relationship { get; set; }
+
+    [Required,Range(1,100)]
+        public int Age { get; set; }
+    [Required,AllowedValues(Gender.Male,Gender.Female)]
+        public Gender Gender { get; set; }
+    [Required,Range(1,99999999)]
+
+        public double Budget { get; set; }
+
+    }
+
+    }
+}
