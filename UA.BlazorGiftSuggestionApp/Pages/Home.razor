@@ -2,13 +2,26 @@
 @using System.ComponentModel.DataAnnotations
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>Birthday Gift Suggestion App</h1>
 
-Welcome to your new app.
+<EditForm Model="formModel" OnValidSubmit="HandleFormSubmit" novalidate>
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+    <ValidationSummary></ValidationSummary>
+    <InputSelect @bind-Value="formModel.Relationship" class="select select-bordered w-full max-w-xs">
+        <option disabled selected>Select a Relationship</option>
+        @foreach (var relationship in Enum.GetValues<RelationshipType>())
+        {
+
+            <option value="@relationship">@relationship.ToString()</option>
+        }
+    </InputSelect>
+
+</EditForm>
 
 
 @code
 {
+    private FormModel formModel = new FormModel();
     protected class FormModel
     {
 
@@ -18,15 +31,18 @@ Welcome to your new app.
             RelationshipType.Child, RelationshipType.Spouse, RelationshipType.Colleague, RelationshipType.Other)]
         public RelationshipType Relationship { get; set; }
 
-    [Required,Range(1,100)]
-        public int Age { get; set; }
-    [Required,AllowedValues(Gender.Male,Gender.Female)]
-        public Gender Gender { get; set; }
-    [Required,Range(1,99999999)]
+        [Required, Range(1, 100)]
+        public int Age { get; set; } = default;
+        [Required, AllowedValues(Gender.Male, Gender.Female)]
+        public Gender Gender { get; set; } = Gender.Female;
+        [Required, Range(1, 99999999)]
 
-        public double Budget { get; set; }
+        public double Budget { get; set; } = default;
+
+    }
+    private void HandleFormSubmit()
+    {
 
     }
 
-    }
 }
