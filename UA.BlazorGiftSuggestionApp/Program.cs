@@ -1,3 +1,4 @@
+using Blazored.Modal;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using OpenAI.Extensions;
@@ -10,4 +11,6 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 var openAIApikey = builder.Configuration["OpenAIApiKey"];
 builder.Services.AddOpenAIService(settings => { settings.ApiKey = openAIApikey; });
+builder.Services.AddBlazoredModal();
+
 await builder.Build().RunAsync();
