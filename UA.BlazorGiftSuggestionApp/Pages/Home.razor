@@ -185,7 +185,7 @@
         promptBuilder.AppendLine($"<BudgetInDollars>{formModel.Budget}</BudgetInDollars>");
     }
 
-    private const string AssistantsPrompt = "You're a world-class Birthday gift assistant for Turkish people. You know how to select the best gift for the person and make the person happy! Don't include any extra explanations in your responses!";
+    private const string AssistantsPrompt = "You're a world-class Birthday gift assistant for Turkish people. You know how to select the best gift for the person and make the person happy! Don't be so general. Be a little bit more specific when it comes to gifts. Don't include any extra explanations in your responses!";
     private const string PromptIntroductionText = "Please list seven gift ideas with very short descriptions in Markdown format and add emojis to the beginning of each line that match the gift idea with the specifications below. If I like your suggestions, I'll tip you $5000 for your help.";
 
     protected class FormModel
