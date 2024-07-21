@@ -3,6 +3,8 @@
 @using UA.BlazorGiftSuggestionApp.Enums
 @using OpenAI.Interfaces
 @using OpenAI.ObjectModels.RequestModels
+@using UA.BlazorGiftSuggestionApp.Components
+
 @inject IOpenAIService OpenAiService
 
 <PageTitle>Home</PageTitle>
@@ -118,7 +120,7 @@
             var completionResult = await OpenAiService.ChatCompletion.CreateCompletion(new ChatCompletionCreateRequest
             {
                 Messages = new List<ChatMessage>
-            {
+    {
                     ChatMessage.FromSystem(AssistantsPrompt),
                     ChatMessage.FromUser(promptBuilder.ToString()),
                 },
@@ -126,8 +128,13 @@
             });
             if (completionResult.Successful)
             {
-                Console.WriteLine(completionResult.Choices.First().Message.Content);
-                Modal.Show<Counter>();
+
+                var gptContent = completionResult.Choices.First().Message.Content;
+
+                var parameters = new ModalParameters()
+    .Add("GeneratedHtml", gptContent);
+
+                Modal.Show<GiftResultModal>(parameters);
                 // Handle the successful result (e.g., display suggestions)
             }
         }
