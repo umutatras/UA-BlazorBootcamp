@@ -98,19 +98,34 @@
     }
     private async Task HandleFormSubmit()
     {
-        BuildThePrompt();
-        var completionResult = await OpenAiService.ChatCompletion.CreateCompletion(new ChatCompletionCreateRequest
+        try
         {
-            Messages = new List<ChatMessage>
-    {
-                ChatMessage.FromSystem(AssistantsPrompt),
-                ChatMessage.FromUser(prompBuilder.ToString()),
-            },
-            Model = OpenAI.ObjectModels.Models.Gpt_4o,
-        });
-        if (completionResult.Successful)
+            isLoading = true;
+
+            BuildThePrompt();
+
+            var completionResult = await OpenAiService.ChatCompletion.CreateCompletion(new ChatCompletionCreateRequest
+            {
+                Messages = new List<ChatMessage>
+         {
+             ChatMessage.FromSystem(AssistantsPrompt),
+             ChatMessage.FromUser(prompBuilder.ToString()),
+         },
+                Model = OpenAI.ObjectModels.Models.Gpt_4o,
+            });
+            if (completionResult.Successful)
+            {
+                Console.WriteLine(completionResult.Choices.First().Message.Content);
+            }
+        }
+        catch (Exception e)
         {
-            Console.WriteLine(completionResult.Choices.First().Message.Content);
+            Console.WriteLine(e);
+            throw;
+        }
+        finally
+        {
+            isLoading = false;
         }
     }
 
