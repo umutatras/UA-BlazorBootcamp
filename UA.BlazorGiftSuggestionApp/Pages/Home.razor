@@ -2,7 +2,7 @@
 @using System.ComponentModel.DataAnnotations
 @using UA.BlazorGiftSuggestionApp.Enums
 @using OpenAI.Interfaces
-@using OpenAI.ObjectModels.RequestModels 
+@using OpenAI.ObjectModels.RequestModels
 @inject IOpenAIService OpenAiService
 
 <div class="flex items-center justify-center min-h-screen bg-base-200">
@@ -87,21 +87,24 @@
 
     private FormModel formModel = new FormModel();
     private static System.Text.StringBuilder prompBuilder = new();
-    private async Task HandleFormSubmit()
+    private void BuildThePrompt()
     {
+        prompBuilder.Clear();
         prompBuilder.AppendLine(PromptIntroductionText);
         prompBuilder.AppendLine($"<Relationship>{formModel.Relationship}</Relationship>");
         prompBuilder.AppendLine($"<Gender>{formModel.Gender}</Gender>");
         prompBuilder.AppendLine($"<Age>{formModel.Age}</Age>");
         prompBuilder.AppendLine($"<BudgetInDollars>{formModel.Budget}</BudgetInDollars>");
+    }
+    private async Task HandleFormSubmit()
+    {
+        BuildThePrompt();
         var completionResult = await OpenAiService.ChatCompletion.CreateCompletion(new ChatCompletionCreateRequest
         {
             Messages = new List<ChatMessage>
-        {
+    {
                 ChatMessage.FromSystem(AssistantsPrompt),
-                ChatMessage.FromUser("Who won the world series in 2020?"),
-                ChatMessage.FromAssistant("The Los Angeles Dodgers won the World Series in 2020."),
-                ChatMessage.FromUser("Where was it played?")
+                ChatMessage.FromUser(prompBuilder.ToString()),
             },
             Model = OpenAI.ObjectModels.Models.Gpt_4o,
         });
