@@ -1,11 +1,12 @@
 ﻿@page "/"
 @using System.ComponentModel.DataAnnotations
-@using UA.BlazorGiftSuggestionApp.Enums
-@using OpenAI.Interfaces
+@using System.Text
 @using Markdig
+@using OpenAI.Interfaces
+@using OpenAI.ObjectModels
 @using OpenAI.ObjectModels.RequestModels
 @using UA.BlazorGiftSuggestionApp.Components
-
+@using UA.BlazorGiftSuggestionApp.Enums
 @inject IOpenAIService OpenAiService
 
 <PageTitle>Home</PageTitle>
@@ -23,7 +24,7 @@
                         <label class="label">
                             <span class="label-text">Relationship</span>
                         </label>
-                        <InputSelect @oninput="HandleRelationshipChange" @bind-Value="formModel.Relationship" class="select select-bordered w-full">
+                        <InputSelect @bind-Value="formModel.Relationship" @oninput="HandleRelationshipChange" class="select select-bordered w-full">
                             <option disabled="disabled" selected="selected">Select a Relationship</option>
                             @foreach (var relationship in Enum.GetValues<RelationshipType>())
                             {
@@ -61,6 +62,16 @@
                         </label>
                         <InputNumber @bind-Value="formModel.Age" class="input input-bordered w-full" placeholder="Age" />
                         <ValidationMessage For="@(() => formModel.Age)" />
+                    </div>
+                </div>
+
+                <div class="form-control animate__animated animate__fadeInLeft items-center flex justify-center">
+                    <div class="w-full max-w-xs">
+                        <label class="label">
+                            <span class="label-text">Hobbies</span>
+                        </label>
+                        <InputText @bind-Value="formModel.Hobbies" class="input input-bordered w-full" placeholder="Hobbies" />
+                        <ValidationMessage For="@(() => formModel.Hobbies)" />
                     </div>
                 </div>
 
@@ -107,22 +118,7 @@
     [CascadingParameter] public IModalService Modal { get; set; }
     private bool isLoading = false;
     private FormModel formModel = new FormModel();
-    private void HandleRelationshipChange(ChangeEventArgs args)
-    {
-        if (args.Value is null)
-            return;
 
-        var relationship = Enum.Parse<RelationshipType>(args.Value.ToString());
-
-        if(relationship==RelationshipType.Sister)
-        {
-            formModel.Gender = Gender.Female;
-        }
-        if (relationship == RelationshipType.Brother)
-        {
-            formModel.Gender = Gender.Male;
-        }
-    }
     private async Task HandleFormSubmit()
     {
         if (isLoading) return; // Prevent multiple submissions
@@ -136,24 +132,25 @@
             var completionResult = await OpenAiService.ChatCompletion.CreateCompletion(new ChatCompletionCreateRequest
             {
                 Messages = new List<ChatMessage>
-{
+            {
                     ChatMessage.FromSystem(AssistantsPrompt),
                     ChatMessage.FromUser(promptBuilder.ToString()),
                 },
-                Model = OpenAI.ObjectModels.Models.Gpt_4o,
+                Model = Models.Gpt_4o,
             });
             if (completionResult.Successful)
             {
-
                 var gptContent = completionResult.Choices.First().Message.Content;
-                var pipeline = new Markdig.MarkdownPipelineBuilder().UseBootstrap().Build();
 
-                var htmlConent = Markdig.Markdown.ToHtml(gptContent, pipeline);
+                var pipeline = new MarkdownPipelineBuilder().UseBootstrap().Build();
+
+                var htmlContent = Markdown.ToHtml(gptContent, pipeline);
 
                 var parameters = new ModalParameters()
-.Add("GeneratedHtml", htmlConent);
+                    .Add("GeneratedHtml", htmlContent);
 
                 Modal.Show<GiftResultModal>(parameters);
+
                 // Handle the successful result (e.g., display suggestions)
             }
         }
@@ -168,7 +165,27 @@
         }
     }
 
-    private static System.Text.StringBuilder promptBuilder = new();
+    private void HandleRelationshipChange(ChangeEventArgs args)
+    {
+        // Bunu vallahi alper hoca yazdirdi ben uyardim ama sorun dinledi mi dinlemedi
+        // Yok bu adam dinlemez
+        // Laftan da anlamiyo zaten
+        // Anlamaz ki
+
+        if (args.Value is null)
+            return;
+
+        var relationship = Enum.Parse<RelationshipType>(args.Value.ToString());
+
+        if (relationship == RelationshipType.Sister)
+            formModel.Gender = Gender.Female;
+
+        if (relationship == RelationshipType.Brother)
+            formModel.Gender = Gender.Male;
+
+    }
+
+    private static StringBuilder promptBuilder = new();
 
     private void BuildThePrompt()
     {
@@ -181,6 +198,8 @@
         promptBuilder.AppendLine($"<Gender>{formModel.Gender}</Gender>");
 
         promptBuilder.AppendLine($"<Age>{formModel.Age}</Age>");
+
+        promptBuilder.AppendLine($"<Hobbies>{formModel.Hobbies}</Hobbies>");
 
         promptBuilder.AppendLine($"<BudgetInDollars>{formModel.Budget}</BudgetInDollars>");
     }
@@ -203,5 +222,9 @@
 
         [Required, Range(1, 99999999)]
         public double Budget { get; set; } = default;
+
+
+        [Required, MaxLength(150)]
+        public string Hobbies { get; set; } = string.Empty;
     }
 }
