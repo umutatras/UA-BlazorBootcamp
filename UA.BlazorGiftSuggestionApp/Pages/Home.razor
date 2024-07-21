@@ -130,9 +130,10 @@
             {
 
                 var gptContent = completionResult.Choices.First().Message.Content;
+                var htmlConent = Markdig.Markdown.ToHtml(gptContent);
 
                 var parameters = new ModalParameters()
-    .Add("GeneratedHtml", gptContent);
+.Add("GeneratedHtml", htmlConent);
 
                 Modal.Show<GiftResultModal>(parameters);
                 // Handle the successful result (e.g., display suggestions)
