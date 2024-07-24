@@ -9,6 +9,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UA.BlazorOpenAIStarter", "U
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UA.BlazorGiftSuggestionApp", "UA.BlazorGiftSuggestionApp\UA.BlazorGiftSuggestionApp.csproj", "{2F15DED0-07FF-45F8-B87A-3F37F3F3774F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VideoTransciberApp", "VideoTransciberApp", "{53C0C505-C073-428B-AECF-DDBB20E674C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UA.VideoTransciberApp.ConsoleClient", "UA.VideoTransciberApp.ConsoleClient\UA.VideoTransciberApp.ConsoleClient.csproj", "{2AA26AC4-8385-4B22-994A-A1934BCE8348}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,9 +31,16 @@ Global
 		{2F15DED0-07FF-45F8-B87A-3F37F3F3774F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F15DED0-07FF-45F8-B87A-3F37F3F3774F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F15DED0-07FF-45F8-B87A-3F37F3F3774F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AA26AC4-8385-4B22-994A-A1934BCE8348}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AA26AC4-8385-4B22-994A-A1934BCE8348}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AA26AC4-8385-4B22-994A-A1934BCE8348}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AA26AC4-8385-4B22-994A-A1934BCE8348}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2AA26AC4-8385-4B22-994A-A1934BCE8348} = {53C0C505-C073-428B-AECF-DDBB20E674C4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5AC10456-A105-4425-ACA2-5877C5AB3E5F}
