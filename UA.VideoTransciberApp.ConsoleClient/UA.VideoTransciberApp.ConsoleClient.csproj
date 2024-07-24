@@ -12,13 +12,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="ffmpeg\ffmpeg.exe">
+    <None Update="ffmpeg.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="ffmpeg\ffplay.exe">
+    <None Update="ffplay.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="ffmpeg\ffprobe.exe">
+    <None Update="ffprobe.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
