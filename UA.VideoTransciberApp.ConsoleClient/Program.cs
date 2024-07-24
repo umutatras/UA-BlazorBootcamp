@@ -32,15 +32,25 @@ var audioResult = await openAiService.Audio.CreateTranscription(new AudioCreateT
     Model = Models.WhisperV1,
     ResponseFormat = StaticValues.AudioStatics.ResponseFormat.Srt
 });
-if (audioResult.Successful)
+
+Console.WriteLine(string.Join("\n", audioResult.Text));
+var transcription = audioResult.Text;
+await File.WriteAllTextAsync("C:\\Users\\eftel\\Desktop\\WhisperResponse.srt", transcription, cts.Token);
+
+var language = "Turkish";
+
+var completionResult = await openAiService.ChatCompletion.CreateCompletion(new ChatCompletionCreateRequest
 {
-    Console.WriteLine(string.Join("\n", audioResult.Text));
-}
-else
+    Messages = new List<ChatMessage>
 {
-    if (audioResult.Error == null)
-    {
-        throw new Exception("Unknown Error");
-    }
-    Console.WriteLine($"{audioResult.Error.Code}: {audioResult.Error.Message}");
+    ChatMessage.FromSystem($"You are a helpful translator from English to {language}. You've worked as a translator your whole life and are very good at it. Don't include any extra explanations in your responses!"),
+    ChatMessage.FromUser($"Could you please translate the text given below to {language}. The text is a \".srt\" file. Therefore, do not change the time values! If I like your suggestions, I'll tip you $5000 for your help.\n{transcription}"),
+},
+    Model = Models.Gpt_4o,
+});
+if (completionResult.Successful)
+{
+    var turkishTranscription = completionResult.Choices.First().Message.Content;
+    Console.WriteLine(turkishTranscription);
+    await File.WriteAllTextAsync("C:\\Users\\eftel\\Desktop\\WhisperResponse.tr-TR.srt", turkishTranscription, cts.Token);
 }
