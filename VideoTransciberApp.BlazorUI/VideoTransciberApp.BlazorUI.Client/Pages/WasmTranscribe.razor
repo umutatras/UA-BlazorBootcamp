@@ -1,7 +1,6 @@
-﻿@page "/transcribe"
-
-
+﻿@page "/wasm-transcribe"
 @using System.ComponentModel.DataAnnotations
+@rendermode InteractiveAuto
 
 @inject HttpClient HttpClient
 
@@ -12,7 +11,7 @@
         <div class="card-body">
             <h2 class="card-title mb-4">Upload Video</h2>
 
-            <EditForm Model="@model" enctype="multipart/form-data" Enhance method="post" OnValidSubmit="UploadVideo" FormName="trancribeForm">
+            <EditForm Model="@model" OnValidSubmit="UploadVideo">
                 <DataAnnotationsValidator />
                 <ValidationSummary />
 
@@ -34,11 +33,11 @@
                     <label class="label">
                         <span class="label-text">Choose a video file</span>
                     </label>
-                    <InputFile name="model.VideoFile" class="file-input file-input-bordered w-full max-w-xs" accept="video/*" max="" />
+                    <InputFile OnChange="OnFileSelected" class="file-input file-input-bordered w-full max-w-xs" accept="video/*" max="" />
                     <ValidationMessage For="@(() => model.VideoFile)" />
                 </div>
 
-                <button type="submit" class="btn btn-primary w-full @(IsUploading ? "loading" : "")">
+                <button type="submit" class="btn btn-primary w-full @(IsUploading ? "loading" : "")" disabled="@(!model.IsFileSelected || IsUploading)">
                     @if (IsUploading)
                     {
                         <span class="loading loading-spinner"></span>
@@ -83,9 +82,7 @@
 </div>
 
 @code {
-
-    [SupplyParameterFromForm]
-    private VideoUploadModel model { get; set; } = new();
+    private VideoUploadModel model = new VideoUploadModel();
     private static List<string> Languages { get; set; } = ["English", "Spanish", "French", "German", "Italian", "Portuguese", "Russian", "Chinese", "Japanese", "Korean", "Turkish"];
     private bool IsUploading { get; set; } = false;
     private string ErrorMessage { get; set; } = string.Empty;
@@ -100,7 +97,7 @@
 
     private async Task UploadVideo()
     {
-        if (!model.SelectedLanguages.Any())
+        if (!model.IsFileSelected || !model.SelectedLanguages.Any())
         {
             ErrorMessage = "Please select a file and at least one language.";
             return;
@@ -121,11 +118,11 @@
                 content.Add(new StringContent(language), "languages");
             }
 
-            var response = await HttpClient.PostAsync("Videos/Upload", content);
+            var response = await HttpClient.PostAsync("Videos/", content);
 
             if (response.IsSuccessStatusCode)
             {
-                //Transcriptions = await response.Content.ReadFromJsonAsync<List<TranscriptionModel>>() ?? [];
+                Transcriptions = await response.Content.ReadFromJsonAsync<List<TranscriptionModel>>() ?? [];
                 SuccessMessage = "Video uploaded and transcribed successfully!";
             }
             else
