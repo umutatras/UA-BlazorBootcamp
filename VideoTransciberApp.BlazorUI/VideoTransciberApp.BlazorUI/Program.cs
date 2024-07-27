@@ -7,9 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
-
-var app = builder.Build();
-
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://localhost:5214/api/") }); var app = builder.Build();
+builder.Services.AddControllers();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
