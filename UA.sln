@@ -13,9 +13,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VideoTransciberApp", "Video
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UA.VideoTransciberApp.ConsoleClient", "UA.VideoTransciberApp.ConsoleClient\UA.VideoTransciberApp.ConsoleClient.csproj", "{2AA26AC4-8385-4B22-994A-A1934BCE8348}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoTransciberApp.BlazorUI", "VideoTransciberApp.BlazorUI\VideoTransciberApp.BlazorUI\VideoTransciberApp.BlazorUI.csproj", "{CCE4D1E1-E9D5-46EB-928E-ED1B60DDE3B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VideoTransciberApp.BlazorUI", "VideoTransciberApp.BlazorUI\VideoTransciberApp.BlazorUI\VideoTransciberApp.BlazorUI.csproj", "{CCE4D1E1-E9D5-46EB-928E-ED1B60DDE3B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoTransciberApp.BlazorUI.Client", "VideoTransciberApp.BlazorUI\VideoTransciberApp.BlazorUI.Client\VideoTransciberApp.BlazorUI.Client.csproj", "{61C86F1F-9038-42D7-9AA1-4CF3C37052C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VideoTransciberApp.BlazorUI.Client", "VideoTransciberApp.BlazorUI\VideoTransciberApp.BlazorUI.Client\VideoTransciberApp.BlazorUI.Client.csproj", "{61C86F1F-9038-42D7-9AA1-4CF3C37052C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
