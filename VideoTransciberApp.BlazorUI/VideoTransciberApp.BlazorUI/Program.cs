@@ -2,13 +2,13 @@ using VideoTransciberApp.BlazorUI.Client.Pages;
 using VideoTransciberApp.BlazorUI.Components;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddControllers();
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://localhost:5214/api/") }); var app = builder.Build();
-builder.Services.AddControllers();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -30,5 +30,5 @@ app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(VideoTransciberApp.BlazorUI.Client._Imports).Assembly);
-
+app.MapControllers();
 app.Run();
