@@ -1,5 +1,6 @@
 using VideoTransciberApp.BlazorUI.Client.Pages;
 using VideoTransciberApp.BlazorUI.Components;
+using OpenAI.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
@@ -8,7 +9,11 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://localhost:5214/api/") }); var app = builder.Build();
-
+var openAIApiKey = builder
+    .Configuration
+    .GetSection("OpenAIApiKey")
+    .Value;
+builder.Services.AddOpenAIService(settings => settings.ApiKey = openAIApiKey);
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
