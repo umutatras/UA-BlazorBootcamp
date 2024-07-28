@@ -1,5 +1,5 @@
 ﻿
-<button type="@Type" class="@CssClass" style="@Styles" @onclick="(()=>OnClick.InvokeAsync())">
+<button type="@Type" class="@GetCssClass()" style="@CssStyles" @onclick="@(() => OnClick.InvokeAsync())">
     @Text
 </button>
 
@@ -15,9 +15,33 @@
     [Parameter]
     public string CssClass { get; set; } = string.Empty;
     [Parameter]
+    public string CssStyles { get; set; } = string.Empty;
+
+    [Parameter]
     public ButtonStyle Style { get; set; } = ButtonStyle.Primary;
     [Parameter]
-    public string Styles { get; set; } = string.Empty;
+    public ButtonSize Size { get; set; } = ButtonSize.Medium;
+
     [Parameter]
     public string Type { get; set; } = "button";
+
+    private string GetButtonStyle()
+    {
+        return nameof(Style).ToLowerInvariant();
+    }
+    private string GetCssClass()
+    {
+        return $"btn btn-{GetButtonStyle()} btn-{GetButtonSize()} {CssClass}";
+    }
+    private string GetButtonSize()
+    {
+        return Size switch
+        {
+            ButtonSize.ExtraSmall => "xs",
+            ButtonSize.Small => "sm",
+            ButtonSize.Medium => String.Empty,
+            ButtonSize.Large => "lg",
+            _ => string.Empty
+        };
+    }
 }
