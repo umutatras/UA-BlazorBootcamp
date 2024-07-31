@@ -5,7 +5,8 @@ using OpenAI.Managers;
 using OpenAI.ObjectModels.RequestModels;
 using OpenAI.ObjectModels;
 using Xabe.FFmpeg;
-using static VideoTransciberApp.BlazorUI.Client.Pages.WasmTranscribe;
+using VideoTransciberApp.BlazorUI.Client.Models;
+
 
 namespace VideoTransciberApp.BlazorUI.Controllers
 {

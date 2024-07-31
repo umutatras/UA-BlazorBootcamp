@@ -1,7 +1,7 @@
 ﻿using OpenAI.Interfaces;
 using OpenAI.ObjectModels;
 using OpenAI.ObjectModels.RequestModels;
-using VideoTransciberApp.BlazorUI.Models;
+using VideoTransciberApp.BlazorUI.Client.Models;
 using Xabe.FFmpeg;
 
 

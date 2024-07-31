@@ -1,5 +1,6 @@
 ﻿@page "/wasm-transcribe"
 @using System.ComponentModel.DataAnnotations
+@using BlazorUI.Client.Models
 @rendermode InteractiveWebAssembly
 
 @inject HttpClient HttpClient
@@ -153,9 +154,5 @@
         public bool IsFileSelected { get; set; } = false;
     }
 
-    public class TranscriptionModel
-    {
-        public string Language { get; set; }
-        public string Text { get; set; }
-    }
+  
 }
