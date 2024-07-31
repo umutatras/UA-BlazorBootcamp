@@ -2,6 +2,7 @@ using VideoTransciberApp.BlazorUI.Client.Pages;
 using VideoTransciberApp.BlazorUI.Components;
 using OpenAI.Extensions;
 using VideoTransciberApp.BlazorUI.Services;
+using BlazorDownloadFile;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
@@ -15,6 +16,8 @@ var openAIApiKey = builder
     .GetSection("OpenAIApiKey")
     .Value;
 builder.Services.AddOpenAIService(settings => settings.ApiKey = openAIApiKey);
+builder.Services.AddBlazorDownloadFile(ServiceLifetime.Scoped);
+
 builder.Services.AddScoped<TranscaptionManager>();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

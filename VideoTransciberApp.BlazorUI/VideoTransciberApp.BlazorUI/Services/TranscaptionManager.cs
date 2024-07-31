@@ -1,11 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using OpenAI.Interfaces;
-using OpenAI.Managers;
-using OpenAI.ObjectModels.RequestModels;
+﻿using OpenAI.Interfaces;
 using OpenAI.ObjectModels;
-using VideoTransciberApp.BlazorUI.Controllers;
+using OpenAI.ObjectModels.RequestModels;
+using VideoTransciberApp.BlazorUI.Models;
 using Xabe.FFmpeg;
-using static VideoTransciberApp.BlazorUI.Client.Pages.WasmTranscribe;
+
 
 namespace VideoTransciberApp.BlazorUI.Services
 {
@@ -38,8 +36,10 @@ namespace VideoTransciberApp.BlazorUI.Services
             }
             catch (Exception ex)
             {
+                return new List<TranscriptionModel>();
+
                 throw;
-                
+
             }
         }
         private async Task<List<TranscriptionModel>> TranslateTranscriptionsAsync(TranscribeAudioResponse transcription, string[] languages, CancellationToken cancellationToken)
@@ -61,7 +61,7 @@ namespace VideoTransciberApp.BlazorUI.Services
             return results.ToList();
         }
 
-      
+
         private async Task<TranscriptionModel> TranslateTranscriptionAsync(TranscribeAudioResponse transcription, string language, CancellationToken cancellationToken)
         {
             var completionResult = await _openAiService.ChatCompletion.CreateCompletion(new ChatCompletionCreateRequest

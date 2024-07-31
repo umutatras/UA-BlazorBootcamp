@@ -9,7 +9,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Components\TranscriptionCard.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BlazorDownloadFile" Version="2.4.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Components\TranscriptionCard.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Components\TranscriptionCard.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Components\TranscriptionCard.razor" />
   </ItemGroup>
 
 </Project>
