@@ -1,28 +1,26 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using OpenAI.Interfaces;
 using OpenAI.Managers;
 using OpenAI.ObjectModels.RequestModels;
 using OpenAI.ObjectModels;
+using VideoTransciberApp.BlazorUI.Controllers;
 using Xabe.FFmpeg;
 using static VideoTransciberApp.BlazorUI.Client.Pages.WasmTranscribe;
 
-namespace VideoTransciberApp.BlazorUI.Controllers
+namespace VideoTransciberApp.BlazorUI.Services
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class VideosController : ControllerBase
+    public class TranscaptionManager
     {
         private readonly IWebHostEnvironment _environment;
         private readonly IOpenAIService _openAiService;
-        public VideosController(IWebHostEnvironment environment, IOpenAIService service)
+
+
+        public TranscaptionManager(IWebHostEnvironment environment, IOpenAIService service)
         {
             _environment = environment;
             _openAiService = service;
         }
-
-        [HttpPost]
-        public async Task<IActionResult> UploadAsync(VideoUploadRequest request, CancellationToken cancellationToken)
+        public async Task<List<TranscriptionModel>> UploadAsync(VideoUploadRequest request, CancellationToken cancellationToken)
         {
             try
             {
@@ -36,12 +34,12 @@ namespace VideoTransciberApp.BlazorUI.Controllers
 
                 var transcriptions = await TranslateTranscriptionsAsync(transcriptionResponse, request.Languages, cancellationToken);
 
-                return Ok(transcriptions);
+                return transcriptions;
             }
             catch (Exception ex)
             {
-                // Log the exception
-                return StatusCode(500, $"An error occurred: {ex.Message}");
+                throw;
+                
             }
         }
         private async Task<List<TranscriptionModel>> TranslateTranscriptionsAsync(TranscribeAudioResponse transcription, string[] languages, CancellationToken cancellationToken)
@@ -62,6 +60,7 @@ namespace VideoTransciberApp.BlazorUI.Controllers
 
             return results.ToList();
         }
+
       
         private async Task<TranscriptionModel> TranslateTranscriptionAsync(TranscribeAudioResponse transcription, string language, CancellationToken cancellationToken)
         {
@@ -160,7 +159,6 @@ namespace VideoTransciberApp.BlazorUI.Controllers
 
             Language = language;
         }
-    }
 
-   
+    }
 }
