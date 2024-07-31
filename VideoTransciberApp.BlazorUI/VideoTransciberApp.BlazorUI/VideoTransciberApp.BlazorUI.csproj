@@ -7,10 +7,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Components\Pages\Transcribe.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\VideoTransciberApp.BlazorUI.Client\VideoTransciberApp.BlazorUI.Client.csproj" />
     <PackageReference Include="Betalgo.OpenAI" Version="8.6.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.1" />
     <PackageReference Include="Xabe.FFmpeg" Version="5.2.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Components\Pages\Transcribe.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Enums\" />
   </ItemGroup>
 
 </Project>
